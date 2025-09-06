@@ -5,26 +5,51 @@
     gap: 20px;
 }
 
-.window {
-    display: inline-block; /* shrink-wrap the content */
+/*.window, .content, .page-content{*/
 
-    background-color: white;
-    border: 2px solid black;
-    padding: 10px;
-    margin: 20px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+/*    display: inline-block; !* make them full-width or you can use flex/grid to size *!*/
+/*    max-width: 600px; !* control how wide the window is *!*/
+/*    margin: 40px auto; !* center it horizontally *!*/
+
+/*    background-color: #fff;*/
+/*    border: 2px solid #000;*/
+/*    !*border-radius: 8px; *! !*para esquinas redondeadas*!*/
+
+
+/*    padding: 10px;*/
+/*}*/
+
+.window, .content, .page-content {
+    display: block;                /* better for block-style window */
+    max-width: 600px;              /* limit width */
+    margin: 40px auto;             /* center horizontally */
+
+    background-color: #fff;
+    border: 2px solid #000;
+    padding: 20px;                 /* more padding for window content */
+
+    /* add some depth */
+    box-shadow: 6px 6px 15px rgba(0,0,0,0.3);
+
+    position: relative;            /* so you can add a title bar if needed */
 }
 
+/*.window-title {*/
+/*    background-color: #ccc;*/
+/*    border-bottom: 2px solid #000;*/
+/*    padding: 5px 10px;*/
+/*    font-weight: bold;*/
+/*    margin: -20px -20px 10px -20px; !* stretch across window *!*/
+/*}*/
 
 body{
     font-family: "lores-15-bold-alt-oakland", sans-serif;
-font-weight: 400;
-font-style: normal;
+    font-weight: 400;
     font-style: normal;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
     justify-content: center;
     align-items: center;
-     text-align: center; 
+    text-align: center;
 }
