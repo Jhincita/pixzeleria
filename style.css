@@ -1,0 +1,30 @@
+.navigation, .header, .description{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.window {
+    display: inline-block; /* shrink-wrap the content */
+
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    margin: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+body{
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+font-weight: 400;
+font-style: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    justify-content: center;
+    align-items: center;
+     text-align: center; 
+}
