@@ -262,6 +262,25 @@
             const el = document.getElementById(id);
             if (el) el.textContent = message;
         }
+
+        const btnShowLogin = document.getElementById('show-login');
+        const btnShowRegister = document.getElementById('show-register');
+    const registerFormContainer = document.getElementById('register-form');
+    const loginFormContainer = document.getElementById('login-form');
+    if (btnShowLogin && btnShowRegister && registerFormContainer && loginFormContainer) {
+        btnShowLogin.addEventListener('click', () => {
+            registerFormContainer.style.display = 'none';
+            loginFormContainer.style.display = 'flex'; // o 'block' según tu CSS
+            clearErrors('reg');
+            clearErrors('login');
+        });
+        btnShowRegister.addEventListener('click', () => {
+            loginFormContainer.style.display = 'none';
+            registerFormContainer.style.display = 'flex'; // o 'block' según tu CSS
+            clearErrors('reg');
+            clearErrors('login');
+        });
+    }
     });
 </script>
 
