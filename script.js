@@ -1,4 +1,4 @@
-const links = document.querySelectorAll('nav a');
+const links = document.querySelectorAll('nav a[data-page]');
 const contentDiv = document.getElementById('page-content');
 const pageContent = document.getElementById("page-content");
 const titleDiv = pageContent.querySelector(".window-title");
@@ -40,3 +40,4 @@ window.addEventListener('popstate', e => {
             });
     }
 });
+

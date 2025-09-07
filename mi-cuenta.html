@@ -137,96 +137,133 @@
         Volver a la página principal
     </a>
 </div>
-
 <script>
-    // Referencias a formularios y botones
-    const registerForm = document.getElementById('register-form');
-    const loginForm = document.getElementById('login-form');
-    const showLoginBtn = document.getElementById('show-login');
-    const showRegisterBtn = document.getElementById('show-register');
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Registro ---
+        const registerForm = document.getElementById('register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', e => {
+                e.preventDefault();
 
-    showLoginBtn.addEventListener('click', () => {
-        registerForm.style.display = 'none';
-        loginForm.style.display = 'block';
-        clearErrors();
-    });
+                clearErrors('reg');
 
-    showRegisterBtn.addEventListener('click', () => {
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-        clearErrors();
-    });
+                let valid = true;
 
-    function clearErrors() {
-        const errors = document.querySelectorAll('.error-message');
-        errors.forEach(e => e.textContent = '');
-    }
+                const username = registerForm.username.value.trim();
+                const email = registerForm.email.value.trim();
+                const password = registerForm.password.value;
+                const passwordConfirm = registerForm.passwordConfirm.value;
 
-    // Validación formulario registro
-    registerForm.addEventListener('submit', e => {
-        e.preventDefault();
-        clearErrors();
+                if (username.length === 0 || username.length > 100) {
+                    showError('reg-username-error', 'El nombre de usuario debe tener entre 1 y 100 caracteres.');
+                    valid = false;
+                }
 
-        let valid = true;
+                if (email.length === 0) {
+                    showError('reg-email-error', 'El correo es obligatorio.');
+                    valid = false;
+                } else {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        showError('reg-email-error', 'Por favor ingresa un correo válido.');
+                        valid = false;
+                    }
+                }
 
-        const username = registerForm.username.value.trim();
-        const email = registerForm.email.value.trim();
-        const password = registerForm.password.value;
-        const passwordConfirm = registerForm.passwordConfirm.value;
+                if (password.length === 0) {
+                    showError('reg-password-error', 'La contraseña es obligatoria.');
+                    valid = false;
+                } else if (password.length < 6) {
+                    showError('reg-password-error', 'La contraseña debe tener al menos 6 caracteres.');
+                    valid = false;
+                }
 
-        if (username.length < 3 || username.length > 20) {
-            document.getElementById('reg-username-error').textContent = 'El nombre de usuario debe tener entre 3 y 20 caracteres.';
-            valid = false;
+                if (passwordConfirm.length === 0) {
+                    showError('reg-password-confirm-error', 'Por favor confirma la contraseña.');
+                    valid = false;
+                } else if (password !== passwordConfirm) {
+                    showError('reg-password-confirm-error', 'Las contraseñas no coinciden.');
+                    valid = false;
+                }
+
+                if (!valid) return;
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+
+                if (users.some(u => u.email === email)) {
+                    showError('reg-email-error', 'Este correo ya está registrado.');
+                    return;
+                }
+
+                users.push({ username, email, password });
+                localStorage.setItem('users', JSON.stringify(users));
+
+                alert('Registro exitoso! Bienvenido a la familia Pixzelera');
+
+                registerForm.reset();
+            });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById('reg-email-error').textContent = 'Por favor ingresa un correo válido.';
-            valid = false;
+        // --- Inicio de sesión ---
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', e => {
+                e.preventDefault();
+
+                clearErrors('login');
+
+                let valid = true;
+
+                const email = loginForm['login-email'].value.trim();
+                const password = loginForm['login-password'].value;
+
+                if (email.length === 0) {
+                    showError('login-email-error', 'El correo es obligatorio.');
+                    valid = false;
+                }
+
+                if (password.length === 0) {
+                    showError('login-password-error', 'La contraseña es obligatoria.');
+                    valid = false;
+                }
+
+                if (!valid) return;
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+
+                const user = users.find(u => u.email === email && u.password === password);
+
+                if (!user) {
+                    showError('login-password-error', 'Correo o contraseña incorrectos.');
+                    return;
+                }
+
+                alert(`Bienvenido, ${user.username}! Has iniciado sesión correctamente.`);
+
+                loginForm.reset();
+
+                // Aquí puedes redirigir o mostrar contenido de usuario logueado
+                // window.location.href = 'mi-cuenta.html';
+            });
         }
 
-        if (password.length < 6) {
-            document.getElementById('reg-password-error').textContent = 'La contraseña debe tener al menos 6 caracteres.';
-            valid = false;
+        // Función para limpiar errores, recibe prefijo para distinguir formularios
+        function clearErrors(prefix) {
+            const errors = document.querySelectorAll(`.error-message`);
+            errors.forEach(e => {
+                // Opcional: limpiar solo errores del formulario correspondiente
+                if (prefix === 'reg' && e.id.startsWith('reg-')) e.textContent = '';
+                else if (prefix === 'login' && e.id.startsWith('login-')) e.textContent = '';
+            });
         }
 
-        if (password !== passwordConfirm) {
-            document.getElementById('reg-password-confirm-error').textContent = 'Las contraseñas no coinciden.';
-            valid = false;
-        }
-
-        if (valid) {
-            alert('Te has registrado con éxito. La pixzelería te da la bienvenida');
-            registerForm.reset();
-        }
-    });
-
-    // Validación formulario login
-    loginForm.addEventListener('submit', e => {
-        e.preventDefault();
-        clearErrors();
-
-        let valid = true;
-
-        const email = loginForm.email.value.trim();
-        const password = loginForm.password.value;
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById('login-email-error').textContent = 'Por favor ingresa un correo válido.';
-            valid = false;
-        }
-
-        if (password.length === 0) {
-            document.getElementById('login-password-error').textContent = 'Por favor ingresa tu contraseña.';
-            valid = false;
-        }
-
-        if (valid) {
-            alert('Inicio de sesión exitoso. La pixzelería te echaba de menos.');
-            loginForm.reset();
+        // Función para mostrar error por id
+        function showError(id, message) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = message;
         }
     });
 </script>
+
 </body>
 </html>
