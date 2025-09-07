@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pixeleria - Registro/Login</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css" />
+    <style>
+        /* Estilos sólo pa el formulario */
+        .auth-container {
+            max-width: 400px;
+            margin: 40px auto;
+            background-color: #fff;
+            border: 2px solid #000;
+            padding: 20px;
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.3);
+            font-family: "lores-15-bold-alt-oakland", sans-serif;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #000;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #333;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .toggle-link {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Pixzelería > Registro/Login</h1>
+</div>
+
+<div style="text-align:center; margin-top: 20px;">
+    <a href="index.html" style="font-weight: bold; color: #000; text-decoration: underline;">
+        Volver a la página principal
+    </a>
+</div>
+
+<p class="description">Pizzería en Pixeles</p>
+
+<div class="auth-container">
+    <!-- Formulario de Registro -->
+    <form id="register-form" novalidate>
+        <h2>Registro de Usuario</h2>
+
+        <label for="reg-username">Nombre de usuario</label>
+        <input type="text" id="reg-username" name="username" required minlength="3" maxlength="20" />
+        <div class="error-message" id="reg-username-error"></div>
+
+        <label for="reg-email">Correo electrónico</label>
+        <input type="email" id="reg-email" name="email" required />
+        <div class="error-message" id="reg-email-error"></div>
+
+        <label for="reg-password">Contraseña</label>
+        <input type="password" id="reg-password" name="password" required minlength="6" />
+        <div class="error-message" id="reg-password-error"></div>
+
+        <label for="reg-password-confirm">Confirmar contraseña</label>
+        <input type="password" id="reg-password-confirm" name="passwordConfirm" required minlength="6" />
+        <div class="error-message" id="reg-password-confirm-error"></div>
+
+        <input type="submit" value="Registrarse" />
+        <button type="button" class="toggle-link" id="show-login">¿Ya tienes cuenta? Inicia sesión</button>
+    </form>
+
+    <!-- Formulario de Login (oculto inicialmente) -->
+    <form id="login-form" novalidate style="display:none;">
+        <h2>Iniciar Sesión</h2>
+
+        <label for="login-email">Correo electrónico</label>
+        <input type="email" id="login-email" name="email" required />
+        <div class="error-message" id="login-email-error"></div>
+
+        <label for="login-password">Contraseña</label>
+        <input type="password" id="login-password" name="password" required />
+        <div class="error-message" id="login-password-error"></div>
+
+        <input type="submit" value="Entrar" />
+        <button type="button" class="toggle-link" id="show-register">¿No tienes cuenta? Regístrate</button>
+    </form>
+</div>
+
+<div style="text-align:center; margin-top: 20px;">
+    <a href="index.html" style="font-weight: bold; color: #000; text-decoration: underline;">
+        Volver a la página principal
+    </a>
+</div>
+
+<script>
+    // Referencias a formularios y botones
+    const registerForm = document.getElementById('register-form');
+    const loginForm = document.getElementById('login-form');
+    const showLoginBtn = document.getElementById('show-login');
+    const showRegisterBtn = document.getElementById('show-register');
+
+    showLoginBtn.addEventListener('click', () => {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        clearErrors();
+    });
+
+    showRegisterBtn.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        clearErrors();
+    });
+
+    function clearErrors() {
+        const errors = document.querySelectorAll('.error-message');
+        errors.forEach(e => e.textContent = '');
+    }
+
+    // Validación formulario registro
+    registerForm.addEventListener('submit', e => {
+        e.preventDefault();
+        clearErrors();
+
+        let valid = true;
+
+        const username = registerForm.username.value.trim();
+        const email = registerForm.email.value.trim();
+        const password = registerForm.password.value;
+        const passwordConfirm = registerForm.passwordConfirm.value;
+
+        if (username.length < 3 || username.length > 20) {
+            document.getElementById('reg-username-error').textContent = 'El nombre de usuario debe tener entre 3 y 20 caracteres.';
+            valid = false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('reg-email-error').textContent = 'Por favor ingresa un correo válido.';
+            valid = false;
+        }
+
+        if (password.length < 6) {
+            document.getElementById('reg-password-error').textContent = 'La contraseña debe tener al menos 6 caracteres.';
+            valid = false;
+        }
+
+        if (password !== passwordConfirm) {
+            document.getElementById('reg-password-confirm-error').textContent = 'Las contraseñas no coinciden.';
+            valid = false;
+        }
+
+        if (valid) {
+            alert('Te has registrado con éxito. La pixzelería te da la bienvenida');
+            registerForm.reset();
+        }
+    });
+
+    // Validación formulario login
+    loginForm.addEventListener('submit', e => {
+        e.preventDefault();
+        clearErrors();
+
+        let valid = true;
+
+        const email = loginForm.email.value.trim();
+        const password = loginForm.password.value;
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('login-email-error').textContent = 'Por favor ingresa un correo válido.';
+            valid = false;
+        }
+
+        if (password.length === 0) {
+            document.getElementById('login-password-error').textContent = 'Por favor ingresa tu contraseña.';
+            valid = false;
+        }
+
+        if (valid) {
+            alert('Inicio de sesión exitoso. La pixzelería te echaba de menos.');
+            loginForm.reset();
+        }
+    });
+</script>
+</body>
+</html>
