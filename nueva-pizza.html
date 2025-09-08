@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixzelería - Nueva Pixza</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <h1>Pixzelería</h1>
+            <p>Panel de Administración</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="admin.html" class="nav-link">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Volver al Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Nueva Pizza</h2>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <div class="form-container">
+                <div class="content-card">
+                    <h3>Crear Nueva Pizza</h3>
+                    <form id="pizza-form" class="auth-form">
+
+                        <!-- Información básica -->
+                        <div class="form-section">
+                            <h4>Información Básica</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="pizza-code">Código de Producto</label>
+                                    <input type="text" id="pizza-code" name="code" required
+                                           pattern="[A-Z0-9]{3,10}"
+                                           placeholder="Ej: PZ001 (solo mayúsculas y números)"
+                                           title="Solo letras mayúsculas y números (3-10 caracteres)">
+                                    <div class="error-message" id="code-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="pizza-name">Nombre de la Pizza</label>
+                                    <input type="text" id="pizza-name" name="name" required
+                                           placeholder="Ej: Pizza Pepperoni" maxlength="50">
+                                    <div class="error-message" id="name-error"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group required">
+                                <label for="pizza-description">Descripción</label>
+                                <textarea id="pizza-description" name="description" required
+                                          placeholder="Describe los ingredientes y características de la pizza..."
+                                          maxlength="200" rows="4"></textarea>
+                                <div class="error-message" id="description-error"></div>
+                            </div>
+                        </div>
+
+                        <!-- Precio y stock -->
+                        <div class="form-section">
+                            <h4>Precio y Inventario</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="pizza-price">Precio (CLP)</label>
+                                    <input type="number" id="pizza-price" name="price" required
+                                           min="1000" max="50000" step="100"
+                                           placeholder="Ej: 8990">
+                                    <div class="error-message" id="price-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="pizza-stock">Stock Disponible</label>
+                                    <input type="number" id="pizza-stock" name="stock" required
+                                           min="0" max="1000" placeholder="Ej: 50">
+                                    <div class="error-message" id="stock-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="pizza-critical-stock">Stock Crítico</label>
+                                    <input type="number" id="pizza-critical-stock" name="criticalStock" required
+                                           min="1" max="100" placeholder="Ej: 5">
+                                    <div class="error-message" id="critical-stock-error"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Categoría e imagen -->
+                        <div class="form-section">
+                            <h4>Categoría e Imagen</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="pizza-category">Categoría</label>
+                                    <select id="pizza-category" name="category" required>
+                                        <option value="">Selecciona una categoría</option>
+                                        <option value="clasicas">Clásicas</option>
+                                        <option value="especiales">Especiales</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="vegetarianas">Vegetarianas</option>
+                                        <option value="veganas">Veganas</option>
+                                    </select>
+                                    <div class="error-message" id="category-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="pizza-image">URL de la Imagen</label>
+                                    <input type="url" id="pizza-image" name="image" required
+                                           placeholder="https://ejemplo.com/imagen-pizza.jpg">
+                                    <div class="error-message" id="image-error"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="form-section">
+                            <h4>Estado del Producto</h4>
+
+                            <div class="form-group">
+                                <label for="pizza-status">Estado</label>
+                                <select id="pizza-status" name="status">
+                                    <option value="active">Activo (disponible para venta)</option>
+                                    <option value="inactive">Inactivo (no disponible)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="window.location.href='admin.html#products'">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Pizza
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

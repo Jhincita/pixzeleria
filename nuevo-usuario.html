@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixzelería - Nuevo Usuario</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <h1>Pixzelería</h1>
+            <p>Panel de Administración</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="admin.html" class="nav-link">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Volver al Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Nuevo Usuario</h2>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <div class="form-container">
+                <div class="content-card">
+                    <h3>Crear Nuevo Usuario</h3>
+                    <form id="user-form" class="auth-form">
+
+                        <!-- Información personal -->
+                        <div class="form-section">
+                            <h4>Información Personal</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-run">RUN (Sin puntos ni guión)</label>
+                                    <input type="text" id="user-run" name="run" required
+                                           pattern="[0-9]{7,9}[0-9Kk]{1}"
+                                           placeholder="12345678-9 (solo números y K)"
+                                           title="Formato: 12345678-9 (solo números y K)">
+                                    <div class="error-message" id="run-error"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-name">Nombres</label>
+                                    <input type="text" id="user-name" name="name" required
+                                           maxlength="50" pattern="[A-Za-záéíóúñüÁÉÍÓÚÑÜ\s]+"
+                                           placeholder="Ingresa los nombres completos"
+                                           title="Solo letras y espacios">
+                                    <div class="error-message" id="name-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="user-lastname">Apellidos</label>
+                                    <input type="text" id="user-lastname" name="lastname" required
+                                           maxlength="50" pattern="[A-Za-záéíóúñüÁÉÍÓÚÑÜ\s]+"
+                                           placeholder="Ingresa los apellidos completos"
+                                           title="Solo letras y espacios">
+                                    <div class="error-message" id="lastname-error"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-email">Email</label>
+                                    <input type="email" id="user-email" name="email" required
+                                           placeholder="usuario@ejemplo.com">
+                                    <div class="error-message" id="email-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="user-birthdate">Fecha de Nacimiento</label>
+                                    <input type="date" id="user-birthdate" name="birthdate" required
+                                           max="2010-12-31" min="1930-01-01">
+                                    <div class="error-message" id="birthdate-error"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seguridad -->
+                        <div class="form-section">
+                            <h4>Seguridad y Acceso</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-password">Contraseña</label>
+                                    <input type="password" id="user-password" name="password" required
+                                           minlength="6" maxlength="20"
+                                           pattern="^(?=.*[A-Za-z])(?=.*\d).{6,}$"
+                                           placeholder="Mínimo 6 caracteres, letras y números"
+                                           title="Mínimo 6 caracteres, al menos una letra y un número">
+                                    <div class="error-message" id="password-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="user-confirm-password">Confirmar Contraseña</label>
+                                    <input type="password" id="user-confirm-password" name="confirmPassword" required
+                                           placeholder="Repite la contraseña">
+                                    <div class="error-message" id="confirm-password-error"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-role">Tipo de Usuario</label>
+                                    <select id="user-role" name="role" required>
+                                        <option value="">Selecciona un tipo de usuario</option>
+                                        <option value="admin">Administrador</option>
+                                        <option value="seller">Vendedor</option>
+                                        <option value="customer">Cliente</option>
+                                    </select>
+                                    <div class="error-message" id="role-error"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ubicación -->
+                        <div class="form-section">
+                            <h4>Ubicación</h4>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="user-region">Región</label>
+                                    <select id="user-region" name="region">
+                                        <option value="">Selecciona una región</option>
+                                        <!-- Las opciones se cargarán con JavaScript -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-commune">Comuna</label>
+                                    <select id="user-commune" name="commune" disabled>
+                                        <option value="">Primero selecciona una región</option>
+                                        <!-- Las opciones se cargarán con JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="form-section">
+                            <h4>Dirección</h4>
+
+                            <div class="form-row">
+                                <div class="form-group required">
+                                    <label for="user-street">Calle</label>
+                                    <input type="text" id="user-street" name="street" required
+                                           maxlength="100" placeholder="Nombre de la calle">
+                                    <div class="error-message" id="street-error"></div>
+                                </div>
+
+                                <div class="form-group required">
+                                    <label for="user-number">Número</label>
+                                    <input type="text" id="user-number" name="number" required
+                                           maxlength="10" placeholder="Número de casa/depto">
+                                    <div class="error-message" id="number-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-department">Departamento/Casa (opcional)</label>
+                                    <input type="text" id="user-department" name="department"
+                                           maxlength="20" placeholder="Nº de Depto, Casa, Block, etc.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="form-section">
+                            <h4>Estado de la Cuenta</h4>
+
+                            <div class="form-group">
+                                <label for="user-status">Estado</label>
+                                <select id="user-status" name="status">
+                                    <option value="active">Activo (acceso permitido)</option>
+                                    <option value="inactive">Inactivo (acceso bloqueado)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="window.location.href='admin.html#users'">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Usuario
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

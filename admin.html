@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixzelería - Panel de Administración</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <h1>Pixzelería</h1>
+            <p>Panel de Administración</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-section="products">
+                    <i class="fas fa-pizza-slice"></i>
+                    <span>Gestión de Productos</span>
+                </li>
+                <li class="nav-item" data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>Gestión de Usuarios</span>
+                </li>
+                <li class="nav-item" data-section="orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Gestión de Órdenes</span>
+                </li>
+                <li class="nav-item" data-section="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </li>
+                <li class="nav-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <div class="admin-user">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=000&color=fff" alt="Admin">
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- Dashboard -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Ventas Hoy</h3>
+                            <p class="stat-number">$152,800</p>
+                            <p class="stat-change positive">+12%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Usuarios Registrados</h3>
+                            <p class="stat-number">1,258</p>
+                            <p class="stat-change positive">+8%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-pizza-slice"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Órdenes Pendientes</h3>
+                            <p class="stat-number">24</p>
+                            <p class="stat-change negative">-3%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Productos Más Vendidos</h3>
+                            <p class="stat-number">5</p>
+                            <p class="stat-change">Destacados</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- Sección de pipshas más vendidas -->
+                    <div class="content-card">
+                        <h3>Productos Más Vendidos</h3>
+                        <div class="best-sellers-list">
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <span class="product-rank">1</span>
+                                    <span class="product-name">Pizza Pepperoni</span>
+                                </div>
+                                <div class="product-stats">
+                                    <span class="sales-count">152 ventas</span>
+                                    <span class="revenue">$1.4M</span>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <span class="product-rank">2</span>
+                                    <span class="product-name">Pizza Margarita</span>
+                                </div>
+                                <div class="product-stats">
+                                    <span class="sales-count">128 ventas</span>
+                                    <span class="revenue">$1.1M</span>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <span class="product-rank">3</span>
+                                    <span class="product-name">Pizza Hawaiana</span>
+                                </div>
+                                <div class="product-stats">
+                                    <span class="sales-count">98 ventas</span>
+                                    <span class="revenue">$890K</span>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <span class="product-rank">4</span>
+                                    <span class="product-name">Pizza Cuatro Quesos</span>
+                                </div>
+                                <div class="product-stats">
+                                    <span class="sales-count">76 ventas</span>
+                                    <span class="revenue">$720K</span>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <span class="product-rank">5</span>
+                                    <span class="product-name">Pizza Vegetariana</span>
+                                </div>
+                                <div class="product-stats">
+                                    <span class="sales-count">64 ventas</span>
+                                    <span class="revenue">$580K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Nuevos Usuarios Registrados</h3>
+                        <div class="new-users-list">
+                            <div class="user-item">
+                                <img src="https://ui-avatars.com/api/?name=Juan+Perez&background=random" alt="User">
+                                <div class="user-info">
+                                    <span>Juan Perez</span>
+                                    <span>Hoy, 14:30</span>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <img src="https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random" alt="User">
+                                <div class="user-info">
+                                    <span>Maria Gonzalez</span>
+                                    <span>Hoy, 12:45</span>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <img src="https://ui-avatars.com/api/?name=Carlos+Lopez&background=random" alt="User">
+                                <div class="user-info">
+                                    <span>Carlos Lopez</span>
+                                    <span>Hoy, 10:20</span>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <img src="https://ui-avatars.com/api/?name=Ana+Martinez&background=random" alt="User">
+                                <div class="user-info">
+                                    <span>Ana Martinez</span>
+                                    <span>Ayer, 18:40</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pipshas -->
+            <section id="products-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Productos</h2>
+                    <a href="nueva-pizza.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Pixza
+                    </a>
+                </div>
+
+                <div class="filters">
+                    <input type="text" placeholder="Buscar productos..." class="search-input">
+                    <select class="filter-select">
+                        <option value="all">Todos los productos</option>
+                        <option value="active">Activos</option>
+                        <option value="inactive">Inactivos</option>
+                        <option value="low-stock">Stock bajo</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>PZ001</td>
+                            <td>Pizza Margarita</td>
+                            <td>$8,990</td>
+                            <td class="stock-cell">
+                                <span class="stock-badge critical">2</span>
+                            </td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PZ002</td>
+                            <td>Pizza Pepperoni</td>
+                            <td>$9,990</td>
+                            <td class="stock-cell">
+                                <span class="stock-badge">15</span>
+                            </td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PZ003</td>
+                            <td>Pizza Hawaiana</td>
+                            <td>$10,990</td>
+                            <td class="stock-cell">
+                                <span class="stock-badge warning">5</span>
+                            </td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PZ004</td>
+                            <td>Pizza Vegetariana</td>
+                            <td>$9,490</td>
+                            <td class="stock-cell">
+                                <span class="stock-badge critical">3</span>
+                            </td>
+                            <td><span class="status-badge inactive">Inactivo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Usuarios -->
+            <section id="users-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Usuarios</h2>
+                    <a href="nuevo-usuario.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Usuario
+                    </a>
+                </div>
+
+                <div class="filters">
+                    <input type="text" placeholder="Buscar usuarios..." class="search-input">
+                    <select class="filter-select">
+                        <option value="all">Todos los usuarios</option>
+                        <option value="admin">Administradores</option>
+                        <option value="seller">Vendedores</option>
+                        <option value="customer">Clientes</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Registro</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>US001</td>
+                            <td>Carlos López</td>
+                            <td>carlos@email.com</td>
+                            <td><span class="role-badge admin">Administrador</span></td>
+                            <td>15/05/2023</td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>US002</td>
+                            <td>María González</td>
+                            <td>maria@email.com</td>
+                            <td><span class="role-badge seller">Vendedor</span></td>
+                            <td>22/06/2023</td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>US003</td>
+                            <td>Juan Pérez</td>
+                            <td>juan@email.com</td>
+                            <td><span class="role-badge customer">Cliente</span></td>
+                            <td>03/07/2023</td>
+                            <td><span class="status-badge inactive">Inactivo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>US004</td>
+                            <td>Ana Martínez</td>
+                            <td>ana@email.com</td>
+                            <td><span class="role-badge customer">Cliente</span></td>
+                            <td>18/08/2023</td>
+                            <td><span class="status-badge active">Activo</span></td>
+                            <td>
+                                <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Las órdenes  -->
+            <section id="orders-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Órdenes</h2>
+                </div>
+
+                <div class="filters">
+                    <input type="text" placeholder="Buscar órdenes..." class="search-input">
+                    <select class="filter-select">
+                        <option value="all">Todas las órdenes</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="preparing">En preparación</option>
+                        <option value="ready">Listas</option>
+                        <option value="delivered">Entregadas</option>
+                    </select>
+                </div>
+
+                <div class="orders-grid">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Orden #ORD001</h3>
+                            <span class="order-date">15 Sep, 2023</span>
+                        </div>
+                        <div class="order-details">
+                            <p><strong>Cliente:</strong> Carlos López</p>
+                            <p><strong>Total:</strong> $24,980</p>
+                            <p><strong>Estado:</strong> <span class="status-badge preparing">En preparación</span></p>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-outline">Ver detalles</button>
+                            <button class="btn btn-sm btn-primary">Actualizar estado</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Orden #ORD002</h3>
+                            <span class="order-date">14 Sep, 2023</span>
+                        </div>
+                        <div class="order-details">
+                            <p><strong>Cliente:</strong> María González</p>
+                            <p><strong>Total:</strong> $18,990</p>
+                            <p><strong>Estado:</strong> <span class="status-badge pending">Pendiente</span></p>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-outline">Ver detalles</button>
+                            <button class="btn btn-sm btn-primary">Actualizar estado</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Orden #ORD003</h3>
+                            <span class="order-date">14 Sep, 2023</span>
+                        </div>
+                        <div class="order-details">
+                            <p><strong>Cliente:</strong> Juan Pérez</p>
+                            <p><strong>Total:</strong> $31,970</p>
+                            <p><strong>Estado:</strong> <span class="status-badge delivered">Entregada</span></p>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-outline">Ver detalles</button>
+                            <button class="btn btn-sm btn-primary">Actualizar estado</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Orden #ORD004</h3>
+                            <span class="order-date">13 Sep, 2023</span>
+                        </div>
+                        <div class="order-details">
+                            <p><strong>Cliente:</strong> Ana Martínez</p>
+                            <p><strong>Total:</strong> $15,990</p>
+                            <p><strong>Estado:</strong> <span class="status-badge ready">Lista</span></p>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-outline">Ver detalles</button>
+                            <button class="btn btn-sm btn-primary">Actualizar estado</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de reportes -->
+            <section id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h2>Reportes y Estadísticas</h2>
+                    <div class="report-filters">
+                        <select class="filter-select">
+                            <option value="day">Hoy</option>
+                            <option value="week">Esta semana</option>
+                            <option value="month">Este mes</option>
+                            <option value="year">Este año</option>
+                        </select>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card large">
+                        <h3>Pizzas Más Vendidas</h3>
+                        <div class="chart-container">
+                            <canvas id="pizzaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <h3>Ventas por Día</h3>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <h3>Usuarios Más Activos</h3>
+                        <div class="top-users">
+                            <div class="top-user">
+                                <span>1. Carlos López</span>
+                                <span>15 órdenes</span>
+                            </div>
+                            <div class="top-user">
+                                <span>2. María González</span>
+                                <span>12 órdenes</span>
+                            </div>
+                            <div class="top-user">
+                                <span>3. Ana Martínez</span>
+                                <span>9 órdenes</span>
+                            </div>
+                            <div class="top-user">
+                                <span>4. Juan Pérez</span>
+                                <span>7 órdenes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
