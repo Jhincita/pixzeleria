@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById(sectionId).classList.add('active');
 
                 document.querySelector('.admin-header h2').textContent = this.querySelector('span').textContent;
+
+                // Cargar datos de la sección cuando se hace clic
+                loadSectionData(sectionId);
             });
         }
     });
@@ -34,12 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Iniciar charts
     initCharts();
 
-    // Carga los más vendidiwis
+    // Carga los más vendidos
     loadBestSellers();
 
-    // Pa que funcionen los botoncitos
-    document.getElementById('add-product-btn')?.addEventListener('click', showProductModal);
-    document.getElementById('add-user-btn')?.addEventListener('click', showUserModal);
+    // Cargar datos de la sección activa al inicio
+    const activeSection = document.querySelector('.content-section.active');
+    if (activeSection) {
+        loadSectionData(activeSection.id);
+    }
 
     // Setup para validaciones
     if (document.getElementById('pizza-form')) {
@@ -632,5 +637,161 @@ function isValidUrl(string) {
         return true;
     } catch (_) {
         return false;
+    }
+}
+
+// Funciones para cargar datos en las tablas
+function loadProductsTable() {
+    const productsTable = document.querySelector('#products-section .data-table tbody');
+    if (!productsTable) return;
+
+    const pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
+    productsTable.innerHTML = '';
+
+    if (pizzas.length === 0) {
+        productsTable.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px;">
+                    No hay productos registrados. <a href="nueva-pizza.html">Agregar primera pizza</a>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    pizzas.forEach((pizza, index) => {
+        const stockClass = pizza.stock <= pizza.criticalStock ?
+                          (pizza.stock <= 0 ? 'critical' : 'warning') : '';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${pizza.code || 'PZ' + (index + 1).toString().padStart(3, '0')}</td>
+            <td>${pizza.name}</td>
+            <td>$${pizza.price?.toLocaleString('es-CL') || '0'}</td>
+            <td class="stock-cell">
+                <span class="stock-badge ${stockClass}">${pizza.stock || 0}</span>
+            </td>
+            <td><span class="status-badge ${pizza.status || 'active'}">${pizza.status === 'inactive' ? 'Inactivo' : 'Activo'}</span></td>
+            <td>
+                <button class="action-btn edit" data-id="${pizza.code}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" data-id="${pizza.code}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        productsTable.appendChild(row);
+    });
+
+    // Agregar event listeners a los botones
+    attachProductEventListeners();
+}
+
+function loadUsersTable() {
+    const usersTable = document.querySelector('#users-section .data-table tbody');
+    if (!usersTable) return;
+
+    const users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
+    usersTable.innerHTML = '';
+
+    if (users.length === 0) {
+        usersTable.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 20px;">
+                    No hay usuarios registrados. <a href="nuevo-usuario.html">Agregar primer usuario</a>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    users.forEach((user, index) => {
+        const registerDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-CL') :
+                           new Date().toLocaleDateString('es-CL');
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.run || 'US' + (index + 1).toString().padStart(3, '0')}</td>
+            <td>${user.name} ${user.lastname}</td>
+            <td>${user.email}</td>
+            <td><span class="role-badge ${user.role}">${getRoleName(user.role)}</span></td>
+            <td>${registerDate}</td>
+            <td><span class="status-badge ${user.status || 'active'}">${user.status === 'inactive' ? 'Inactivo' : 'Activo'}</span></td>
+            <td>
+                <button class="action-btn edit" data-id="${user.run}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" data-id="${user.run}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        usersTable.appendChild(row);
+    });
+
+    // Agregar event listeners a los botones
+    attachUserEventListeners();
+}
+
+function getRoleName(role) {
+    const roles = {
+        'admin': 'Administrador',
+        'seller': 'Vendedor',
+        'customer': 'Cliente'
+    };
+    return roles[role] || 'Cliente';
+}
+
+function attachProductEventListeners() {
+    document.querySelectorAll('#products-section .action-btn.edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            alert(`Editar producto ${productId} - Funcionalidad en desarrollo`);
+        });
+    });
+
+    document.querySelectorAll('#products-section .action-btn.delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            if (confirm(`¿Estás seguro de eliminar el producto ${productId}?`)) {
+                deleteProduct(productId);
+            }
+        });
+    });
+}
+
+function attachUserEventListeners() {
+    document.querySelectorAll('#users-section .action-btn.edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.getAttribute('data-id');
+            alert(`Editar usuario ${userId} - Funcionalidad en desarrollo`);
+        });
+    });
+
+    document.querySelectorAll('#users-section .action-btn.delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.getAttribute('data-id');
+            if (confirm(`¿Estás seguro de eliminar el usuario ${userId}?`)) {
+                deleteUser(userId);
+            }
+        });
+    });
+}
+
+function deleteProduct(productId) {
+    let pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
+    pizzas = pizzas.filter(pizza => pizza.code !== productId);
+    localStorage.setItem('pixeleriaPizzas', JSON.stringify(pizzas));
+    loadProductsTable();
+    alert('Producto eliminado correctamente');
+}
+
+function deleteUser(userId) {
+    let users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
+    users = users.filter(user => user.run !== userId);
+    localStorage.setItem('pixeleriaUsers', JSON.stringify(users));
+    loadUsersTable();
+    alert('Usuario eliminado correctamente');
+}
+
+// Función para cargar datos cuando se cambia de sección
+function loadSectionData(sectionId) {
+    if (sectionId === 'products-section') {
+        loadProductsTable();
+    } else if (sectionId === 'users-section') {
+        loadUsersTable();
     }
 }
