@@ -1,7 +1,7 @@
 
 body {
-    font-family: "argent-pixel-cf", sans-serif;
-    font-weight: 400;
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+    font-weight: 160;
     font-style: normal;
     margin: 0;
     padding: 0;
@@ -36,4 +36,83 @@ body {
     border-bottom: 2px solid #000;
     padding: 5px 10px;
     margin: -20px -20px 10px -20px; /* stretch across window */
+}
+
+
+
+/* Estilos para formularios de autenticación */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border: 2px solid #000;
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+    background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    min-height: 1.2em;
+}
+
+.pixel-button {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    padding: 10px 20px;
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+}
+
+.pixel-button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Estilo para mensajes de éxito/error */
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid;
+    text-align: center;
+}
+
+.message.success {
+    border-color: green;
+    background-color: #e6ffe6;
+    color: green;
+}
+
+.message.error {
+    border-color: red;
+    background-color: #ffe6e6;
+    color: red;
 }

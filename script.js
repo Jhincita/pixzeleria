@@ -1,18 +1,92 @@
-class PageManager {
-    constructor() {
-        this.pages = {
-            menu: { title: "Menu", content: "..." },
-            about: { title: "About", content: "..." }
-        };
-    }
+const links = document.querySelectorAll('nav a[data-page]');
+const contentDiv = document.getElementById('page-content');
+const pageContent = document.getElementById("page-content");
+const titleDiv = pageContent.querySelector(".window-title");
 
-    addPage(name, page) {
-        this.pages[name] = page;
-    }
+titleDiv.textContent = "Menu"; // change dynamically
 
-    loadPage(pageName) {
-        // loading logic here
+links.forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault(); // stop full page reload
+        const page = link.getAttribute('data-page');
+
+        fetch(page)
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newContent = doc.querySelector('#page-content').innerHTML;
+
+                contentDiv.innerHTML = newContent;
+
+                // update browser history so back/forward works
+                history.pushState({ page }, "", page);
+            })
+            .catch(err => {
+                contentDiv.innerHTML = `<p style="color:red;">Error loading page: ${err.message}</p>`;
+            });
+    });
+});
+
+// Handle back/forward buttons
+window.addEventListener('popstate', e => {
+    if (e.state && e.state.page) {
+        fetch(e.state.page)
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                contentDiv.innerHTML = doc.querySelector('#page-content').innerHTML;
+            });
     }
+});
+
+// Agregar las nuevas páginas a la navegación
+const links = document.querySelectorAll('nav a');
+const contentDiv = document.getElementById('page-content');
+
+// Verificar si estamos en la página principal
+if (contentDiv) {
+    links.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const page = link.getAttribute('data-page');
+
+            // No cargar contenido para páginas de autenticación (ya que son páginas completas)
+            if (page === 'login.html' || page === 'register.html') {
+                window.location.href = page;
+                return;
+            }
+
+            fetch(page)
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContent = doc.querySelector('#page-content').innerHTML;
+
+                    contentDiv.innerHTML = newContent;
+
+                    // update browser history so back/forward works
+                    history.pushState({ page }, "", page);
+                })
+                .catch(err => {
+                    contentDiv.innerHTML = `<p style="color:red;">Error loading page: ${err.message}</p>`;
+                });
+        });
+    });
+
+    // Handle back/forward buttons
+    window.addEventListener('popstate', e => {
+        if (e.state && e.state.page) {
+            fetch(e.state.page)
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    contentDiv.innerHTML = doc.querySelector('#page-content').innerHTML;
+                });
+        }
+    });
 }
 
-const app = new PageManager();
