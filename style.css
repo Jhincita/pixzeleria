@@ -30,7 +30,7 @@ body {
 
     position: relative;
 
-    background-image:url("window_border.svg");
+    background-image:url("window_border_red.svg");
     background-size: 100% 100%; /* stretch to fit div exactly */
     background-position: center;
     background-repeat: no-repeat;
@@ -38,7 +38,7 @@ body {
 
 
 .window-title {
-    background-color: #ccc;
+    background-color: rgba(255, 159, 181, 0.68);
     border-bottom: 2px solid #000;
     padding: 5px 10px;
     margin: -20px -20px 10px -20px; /* stretch across window */
