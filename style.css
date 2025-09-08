@@ -16,6 +16,18 @@ body {
     margin: 1%;
 }
 
+.image-container {
+    width: 80%; /* Takes 80% of parent width */
+    max-width: 500px; /* Optional: max size limit */
+    margin: 0 auto; /* Centers the container */
+}
+
+img {
+    width: 100%; /* Fills the container */
+    height: auto; /* Maintains aspect ratio */
+    display: block;
+}
+
 .title-logo{
     width: 100%;
     max-width: 300px;              /* or whatever max size you want */
