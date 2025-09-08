@@ -1,4 +1,3 @@
-
 .admin-body {
     font-family: "lores-15-bold-alt-oakland", sans-serif;
     background-color: #f0f2f5;
@@ -73,6 +72,27 @@
     margin-top: 30px;
     border-top: 2px solid #333;
     padding-top: 20px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: #ccc;
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.nav-link:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.nav-link i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
 }
 
 /* Main Content */
@@ -213,13 +233,13 @@
 }
 
 /* Lists */
-.low-stock-list, .new-users-list {
+.low-stock-list, .new-users-list, .best-sellers-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.stock-item, .user-item {
+.stock-item, .user-item, .product-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -265,6 +285,61 @@
     color: #666;
 }
 
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 12px;
+    font-size: 0.8rem;
+}
+
+.product-item:nth-child(1) .product-rank {
+    background-color: #FFD700; /* Oro para el primer lugar */
+}
+
+.product-item:nth-child(2) .product-rank {
+    background-color: #C0C0C0; /* Plata para el segundo lugar */
+}
+
+.product-item:nth-child(3) .product-rank {
+    background-color: #CD7F32; /* Bronce para el tercer lugar */
+}
+
+.product-name {
+    font-weight: bold;
+}
+
+.product-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.sales-count {
+    font-weight: bold;
+    color: #000;
+}
+
+.revenue {
+    font-size: 0.8rem;
+    color: #28a745;
+}
+
+.fa-star {
+    color: #FFD700;
+}
+
 /* Section Header */
 .section-header {
     display: flex;
@@ -288,6 +363,8 @@
     font-size: 0.9rem;
     transition: all 0.2s;
     box-shadow: 3px 3px 0 #000;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .btn:hover {
@@ -461,6 +538,7 @@
     padding: 20px;
     box-shadow: 4px 4px 0 #000;
     position: relative;
+    overflow: hidden;
 }
 
 .order-header {
@@ -490,6 +568,13 @@
     gap: 10px;
     margin-top: 15px;
     flex-wrap: nowrap;
+}
+
+.order-actions .btn-sm {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    min-width: auto;
+    white-space: nowrap;
 }
 
 /* Reports */
@@ -540,137 +625,34 @@
     border-bottom: 1px solid #eee;
 }
 
-/* Pixel art enhancements */
-.admin-sidebar, .admin-header, .content-card, .stat-card, .order-card, .report-card {
-    image-rendering: pixelated;
+/* Form Styles */
+.form-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
 }
 
-.btn, .search-input, .filter-select, .data-table {
-    image-rendering: pixelated;
-}
-
-/* Estilos para la sección de Productos Más Vendidos */
-.best-sellers-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.product-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.product-info {
-    display: flex;
-    align-items: center;
-}
-
-.product-rank {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    background-color: #000;
-    color: #fff;
-    border-radius: 50%;
-    font-weight: bold;
-    margin-right: 12px;
-    font-size: 0.8rem;
-}
-
-.product-item:nth-child(1) .product-rank {
-    background-color: #FFD700; /* Oro para el primer lugar */
-}
-
-.product-item:nth-child(2) .product-rank {
-    background-color: #C0C0C0; /* Plata para el segundo lugar */
-}
-
-.product-item:nth-child(3) .product-rank {
-    background-color: #CD7F32; /* Bronce para el tercer lugar */
-}
-
-.product-name {
-    font-weight: bold;
-}
-
-.product-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.sales-count {
-    font-weight: bold;
-    color: #000;
-}
-
-.revenue {
-    font-size: 0.8rem;
-    color: #28a745;
-}
-
-/* Estilos para el ícono de productos más vendidos en la tarjeta de estadísticas */
-.fa-star {
-    color: #FFD700;
-}
-
-/* Estilos para formularios de administración */
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
-}
-
-.form-row .form-group {
-    flex: 1;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 2px solid #000;
-}
-
-/* Estilos para textareas */
-textarea {
-    padding: 10px;
-    border: 2px solid #000;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-    resize: vertical;
-    min-height: 80px;
-}
-
-/* Estilos para selects */
-select {
-    padding: 10px;
-    border: 2px solid #000;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-    background-color: #fff;
-}
-
-/* Estilos para inputs de fecha */
-input[type="date"] {
-    padding: 10px;
-    border: 2px solid #000;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-}
-
-/* Estilos para formularios de administración */
 .auth-form {
     display: flex;
     flex-direction: column;
     gap: 30px;
     margin-top: 20px;
     padding: 25px;
+}
+
+.form-section {
+    margin-bottom: 40px;
+    padding: 25px;
+    border: 2px solid #eee;
+    background-color: #fafafa;
+}
+
+.form-section h4 {
+    margin-bottom: 20px;
+    color: #000;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
 }
 
 .form-row {
@@ -711,6 +693,7 @@ input[type="date"] {
     margin-top: 8px;
     width: 100%;
     box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
@@ -720,7 +703,6 @@ input[type="date"] {
     box-shadow: 0 0 8px rgba(78, 205, 196, 0.8);
     border-color: #4ecdc4;
     transform: translateY(-2px);
-    transition: all 0.3s ease;
 }
 
 .form-group textarea {
@@ -736,353 +718,27 @@ input[type="date"] {
     min-height: 1.2em;
     font-weight: bold;
     padding: 5px 0;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 3px solid #000;
-}
-
-/* Espaciado específico para campos de dirección */
-.address-section {
-    margin: 35px 0;
-    padding: 25px;
-    border: 2px solid #000;
-    background-color: #f9f9f9;
-}
-
-.address-section h4 {
-    margin-bottom: 20px;
-    color: #000;
-    font-size: 1.2rem;
-}
-
-.address-row {
-    display: flex;
-    gap: 25px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-}
-
-.address-row .form-group {
-    flex: 1;
-    margin-bottom: 20px;
-}
-
-.address-row .form-group:first-child {
-    flex: 2;
-    min-width: 320px;
-}
-
-/* Mejora para los selects de región y comuna */
-.region-comuna-container {
-    margin: 30px 0;
-    padding: 20px;
-    border: 2px dashed #000;
-}
-
-.region-comuna-row {
-    display: flex;
-    gap: 25px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.region-comuna-row .form-group {
-    flex: 1;
-    min-width: 250px;
-}
-
-/* Contenedor principal del formulario */
-.form-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 30px;
-}
-
-.content-card {
-    background-color: #fff;
-    border: 3px solid #000;
-    padding: 40px;
-    border-radius: 0;
-    box-shadow: 8px 8px 0 #000;
-    margin: 30px 0;
-}
-
-.content-card h3 {
-    margin-top: 0;
-    margin-bottom: 35px;
-    padding-bottom: 20px;
-    border-bottom: 3px solid #000;
-    color: #000;
-    font-size: 1.8rem;
-    text-align: center;
-}
-
-/* Estilos para los placeholders */
-::placeholder {
-    color: #666;
-    opacity: 0.8;
-    font-style: italic;
-    font-size: 0.95rem;
-}
-
-/* Estilos para campos requeridos */
-.form-group.required label:after {
-    content: " *";
-    color: #dc3545;
-    font-weight: bold;
-}
-
-/* Mejora visual para los botones */
-.btn {
-    padding: 15px 25px;
-    border: 3px solid #000;
-    background-color: #fff;
-    color: #000;
-    cursor: pointer;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 4px 4px 0 #000;
-    text-decoration: none;
-    display: inline-block;
-    min-width: 150px;
-    text-align: center;
-}
-
-.btn:hover {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0 #000;
-}
-
-.btn-primary {
-    background-color: #000;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background-color: #333;
-}
-
-.btn-outline {
-    background-color: transparent;
-    border: 3px solid #000;
-}
-
-.btn-outline:hover {
-    background-color: #000;
-    color: #fff;
-}
-
-/* Estilos para mejorar la legibilidad */
-.form-section {
-    margin-bottom: 40px;
-    padding: 25px;
-    border: 2px solid #eee;
-    background-color: #fafafa;
-}
-
-.form-section h4 {
-    margin-bottom: 20px;
-    color: #000;
-    font-size: 1.3rem;
-    border-bottom: 2px solid #000;
-    padding-bottom: 10px;
-}
-
-/* Espaciado adicional entre secciones */
-.section-spacer {
-    height: 30px;
-}
-
-/* Mejora para los campos de contraseña */
-.password-field {
-    position: relative;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-}
-
-.password-toggle:hover {
-    color: #000;
-}
-
-/* Estilos para enlaces de navegación */
-.nav-link {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    color: #ccc;
-    text-decoration: none;
-    transition: all 0.2s;
-    border-left: 4px solid transparent;
-}
-
-.nav-link:hover {
-    background-color: #333;
-    color: #fff;
-}
-
-.nav-link i {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-}
-
-/* Mejoras específicas para formularios */
-.form-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 20px;
-}
-
-.content-card {
-    background-color: #fff;
-    border: 3px solid #000;
-    padding: 40px;
-    border-radius: 0;
-    box-shadow: 8px 8px 0 #000;
-    margin: 20px 0;
-}
-
-.content-card h3 {
-    margin-top: 0;
-    margin-bottom: 35px;
-    padding-bottom: 20px;
-    border-bottom: 3px solid #000;
-    color: #000;
-    font-size: 1.8rem;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Mejoras para grupos de formulario */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    font-weight: bold;
-    margin-bottom: 12px;
-    font-size: 1.1rem;
-    color: #000;
-    display: block;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 15px;
-    border: 2px solid #000;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-    background-color: #fff;
-    font-size: 1.1rem;
-    margin-top: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(78, 205, 196, 0.8);
-    border-color: #4ecdc4;
-    transform: translateY(-2px);
-}
-
-/* Botones de acción mejorados */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 3px solid #000;
-}
-
-.btn {
-    padding: 15px 30px;
-    border: 3px solid #000;
-    background-color: #fff;
-    color: #000;
-    cursor: pointer;
-    font-family: "lores-15-bold-alt-oakland", sans-serif;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 4px 4px 0 #000;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 160px;
-    gap: 10px;
-}
-
-.btn:hover {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0 #000;
-}
-
-.btn-primary {
-    background-color: #000;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background-color: #333;
-}
-
-.btn-outline {
-    background-color: transparent;
-    border: 3px solid #000;
-}
-
-.btn-outline:hover {
-    background-color: #000;
-    color: #fff;
-}
-
-/* Mensajes de error mejorados */
-.error-message {
-    color: #dc3545;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    min-height: 1.2em;
-    font-weight: bold;
-    padding: 5px 0;
     background-color: #fff;
     border: 1px solid #dc3545;
     padding: 8px 12px;
     border-radius: 4px;
 }
 
-/* Campos requeridos */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 3px solid #000;
+}
+
 .form-group.required label:after {
     content: " *";
     color: #dc3545;
     font-weight: bold;
 }
 
-/* Placeholders mejorados */
 ::placeholder {
     color: #666;
     opacity: 0.8;
@@ -1090,15 +746,13 @@ input[type="date"] {
     font-size: 0.95rem;
 }
 
-/* Mejoras específicas para botones en la sección de órdenes */
-.order-actions .btn-sm {
-    padding: 6px 10px;
-    font-size: 0.75rem;
-    min-width: auto;
-    white-space: nowrap;
+/* Pixel art enhancements */
+.admin-sidebar, .admin-header, .content-card, .stat-card, .order-card, .report-card,
+.btn, .search-input, .filter-select, .data-table {
+    image-rendering: pixelated;
 }
 
-/* Asegurar que los botones se mantengan dentro de la tarjeta */
-.order-card {
-    overflow: hidden;
+/* Section spacer */
+.section-spacer {
+    height: 30px;
 }

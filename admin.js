@@ -1,797 +1,386 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const navItems = document.querySelectorAll('.nav-item');
-    const contentSections = document.querySelectorAll('.content-section');
+// admin.js - Todas las funcionalidades del panel de administración
 
-    navItems.forEach(item => {
-        if (item.id !== 'logout-btn') {
-            item.addEventListener('click', function() {
-                const sectionId = this.getAttribute('data-section') + '-section';
-
-                navItems.forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-
-                contentSections.forEach(section => section.classList.remove('active'));
-                document.getElementById(sectionId).classList.add('active');
-
-                document.querySelector('.admin-header h2').textContent = this.querySelector('span').textContent;
-
-                // Cargar datos de la sección cuando se hace clic
-                loadSectionData(sectionId);
-            });
-        }
-    });
-
-    // Logout
-    document.getElementById('logout-btn').addEventListener('click', function() {
-        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-            sessionStorage.removeItem('adminLoggedIn');
-            window.location.href = 'index.html';
-        }
-    });
-
-    // Toggle sidebar
-    document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-        document.querySelector('.admin-sidebar').classList.toggle('collapsed');
-    });
-
-    // Iniciar charts
-    initCharts();
-
-    // Carga los más vendidos
-    loadBestSellers();
-
-    // Cargar datos de la sección activa al inicio
-    const activeSection = document.querySelector('.content-section.active');
-    if (activeSection) {
-        loadSectionData(activeSection.id);
+// Datos iniciales de las pizzas
+const pizzasIniciales = {
+    '1': {
+        id: '1',
+        codigo: 'PIX001',
+        nombre: 'Margherita Pixel',
+        descripcion: 'Pizza clásica con tomate, mozzarella y albahaca en estilo 8-bit',
+        precio: 12990,
+        stock: 25,
+        categoria: 'Clásicas',
+        estado: 'activo'
+    },
+    '2': {
+        id: '2',
+        codigo: 'PIX002',
+        nombre: 'Pepperoni Retro',
+        descripcion: 'Pepperoni pixelado con queso mozzarella derretido',
+        precio: 15990,
+        stock: 20,
+        categoria: 'Tradicionales',
+        estado: 'activo'
+    },
+    '3': {
+        id: '3',
+        codigo: 'PIX003',
+        nombre: 'Super Mario Special',
+        descripcion: 'Champiñones, pimientos y aceitunas como power-ups',
+        precio: 18990,
+        stock: 15,
+        categoria: 'Especiales',
+        estado: 'activo'
+    },
+    '4': {
+        id: '4',
+        codigo: 'PIX004',
+        nombre: 'Tetris Veggie',
+        descripcion: 'Vegetales organizados en forma de piezas de Tetris',
+        precio: 16990,
+        stock: 18,
+        categoria: 'Vegetarianas',
+        estado: 'inactivo'
     }
-
-    // Setup para validaciones
-    if (document.getElementById('pizza-form')) {
-        setupPizzaFormValidation();
-        document.getElementById('pizza-form').addEventListener('submit', handlePizzaSubmit);
-    }
-
-    if (document.getElementById('user-form')) {
-        loadChileanRegions();
-        setupUserFormValidation();
-        document.getElementById('user-form').addEventListener('submit', handleUserSubmit);
-    }
-});
-
-// Iniciar charts
-function initCharts() {
-    // Chart de venta de pizzas
-    const pizzaCtx = document.getElementById('pizzaChart')?.getContext('2d');
-    if (pizzaCtx) {
-        new Chart(pizzaCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Margarita', 'Pepperoni', 'Hawaiana', 'Vegetariana', 'Cuatro Quesos'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [65, 59, 80, 45, 56],
-                    backgroundColor: ['#ff6b6b', '#4ecdc4', '#ffd166', '#06d6a0', '#118ab2'],
-                    borderColor: ['#000', '#000', '#000', '#000', '#000'],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { drawBorder: false },
-                        ticks: {
-                            font: { family: '"lores-15-bold-alt-oakland", sans-serif' }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { family: '"lores-15-bold-alt-oakland", sans-serif' }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    }
-
-    // Chart de ventas
-    const salesCtx = document.getElementById('salesChart')?.getContext('2d');
-    if (salesCtx) {
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'Ventas ($)',
-                    data: [120000, 190000, 150000, 220000, 180000, 250000, 210000],
-                    backgroundColor: 'rgba(78, 205, 196, 0.2)',
-                    borderColor: '#4ecdc4',
-                    borderWidth: 3,
-                    tension: 0.3,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#4ecdc4',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { drawBorder: false },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + (value / 1000) + 'K';
-                            },
-                            font: { family: '"lores-15-bold-alt-oakland", sans-serif' }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { family: '"lores-15-bold-alt-oakland", sans-serif' }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    }
-}
-
-// Función para cargar datos de las pipshas más vendidas
-function loadBestSellers() {
-    const bestSellers = [
-        { name: "Pixza Pepperoni", sales: 152, revenue: 1400000 },
-        { name: "Pixza Margarita", sales: 128, revenue: 1100000 },
-        { name: "Pixza Hawaiana", sales: 98, revenue: 890000 },
-        { name: "Pixza Cuatro Quesos", sales: 76, revenue: 720000 },
-        { name: "Pixza Vegetariana", sales: 64, revenue: 580000 }
-    ];
-
-    const bestSellersList = document.querySelector('.best-sellers-list');
-
-    if (bestSellersList) {
-        bestSellersList.innerHTML = '';
-
-        bestSellers.forEach((product, index) => {
-            const productItem = document.createElement('div');
-            productItem.className = 'product-item';
-
-            const formattedRevenue = product.revenue >= 1000000
-                ? `$${(product.revenue / 1000000).toFixed(1)}M`
-                : `$${(product.revenue / 1000).toFixed(0)}K`;
-
-            productItem.innerHTML = `
-                <div class="product-info">
-                    <span class="product-rank">${index + 1}</span>
-                    <span class="product-name">${product.name}</span>
-                </div>
-                <div class="product-stats">
-                    <span class="sales-count">${product.sales} ventas</span>
-                    <span class="revenue">${formattedRevenue}</span>
-                </div>
-            `;
-
-            bestSellersList.appendChild(productItem);
-        });
-    }
-}
-
-// Funciones modales
-function showProductModal() {
-    window.location.href = 'new-pizza.html';
-}
-
-function showUserModal() {
-    window.location.href = 'new-user.html';
-}
-
-// Función para simular datos en tiempo real
-function simulateRealTimeUpdates() {
-    setInterval(() => {
-        const statNumbers = document.querySelectorAll('.stat-number');
-        if (statNumbers.length >= 3) {
-            const orders = parseInt(statNumbers[2].textContent);
-            const change = Math.floor(Math.random() * 5) - 2;
-            const newOrders = Math.max(0, orders + change);
-            statNumbers[2].textContent = newOrders;
-
-            const changeElement = document.querySelectorAll('.stat-change')[2];
-            if (change > 0) {
-                changeElement.textContent = `+${change}%`;
-                changeElement.className = 'stat-change positive';
-            } else if (change < 0) {
-                changeElement.textContent = `${change}%`;
-                changeElement.className = 'stat-change negative';
-            } else {
-                changeElement.textContent = '0%';
-                changeElement.className = 'stat-change';
-            }
-        }
-    }, 10000);
-}
-
-// Iniciar simulaciones de datos en tiempo real
-document.addEventListener('DOMContentLoaded', function() {
-    simulateRealTimeUpdates();
-});
-
-// Función para manejar búsquedas y filtros
-function setupFilters() {
-    const searchInputs = document.querySelectorAll('.search-input');
-    const filterSelects = document.querySelectorAll('.filter-select');
-
-    searchInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            filterTable(this.value, this.closest('section').id);
-        });
-    });
-
-    filterSelects.forEach(select => {
-        select.addEventListener('change', function() {
-            filterTableBySelect(this.value, this.closest('section').id);
-        });
-    });
-}
-
-// Funciones de filtrado
-function filterTable(query, sectionId) {
-    console.log(`Buscando: ${query} en la sección: ${sectionId}`);
-}
-
-function filterTableBySelect(value, sectionId) {
-    console.log(`Filtrando por: ${value} en la sección: ${sectionId}`);
-}
-
-// Configurar filtros cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    setupFilters();
-});
-
-// Formulario pixza nueva
-function setupPizzaFormValidation() {
-    const codeInput = document.getElementById('pizza-code');
-    const priceInput = document.getElementById('pizza-price');
-    const stockInput = document.getElementById('pizza-stock');
-    const criticalStockInput = document.getElementById('pizza-critical-stock');
-
-    codeInput.addEventListener('blur', function() {
-        const code = this.value.toUpperCase();
-        this.value = code;
-
-        if (code && isPizzaCodeExists(code)) {
-            showError('code-error', 'Este código ya está en uso');
-        } else {
-            clearError('code-error');
-        }
-    });
-
-    criticalStockInput.addEventListener('blur', function() {
-        const stock = parseInt(stockInput.value) || 0;
-        const criticalStock = parseInt(this.value) || 0;
-
-        if (criticalStock >= stock) {
-            showError('critical-stock-error', 'El stock crítico debe ser menor al stock total');
-        } else {
-            clearError('critical-stock-error');
-        }
-    });
-}
-
-function handlePizzaSubmit(e) {
-    e.preventDefault();
-
-    const formData = {
-        code: document.getElementById('pizza-code').value.toUpperCase(),
-        name: document.getElementById('pizza-name').value,
-        description: document.getElementById('pizza-description').value,
-        price: parseInt(document.getElementById('pizza-price').value),
-        stock: parseInt(document.getElementById('pizza-stock').value),
-        criticalStock: parseInt(document.getElementById('pizza-critical-stock').value),
-        category: document.getElementById('pizza-category').value,
-        image: document.getElementById('pizza-image').value,
-        status: document.getElementById('pizza-status').value,
-        createdAt: new Date().toISOString()
-    };
-
-    if (!validatePizzaForm(formData)) {
-        return;
-    }
-
-    savePizza(formData);
-    alert('¡Pixza creada exitosamente!');
-    window.location.href = 'admin.html#products';
-}
-
-function validatePizzaForm(formData) {
-    let isValid = true;
-
-    if (!formData.code) {
-        showError('code-error', 'El código es obligatorio');
-        isValid = false;
-    } else if (isPizzaCodeExists(formData.code)) {
-        showError('code-error', 'Este código ya está en uso');
-        isValid = false;
-    } else {
-        clearError('code-error');
-    }
-
-    if (!formData.name) {
-        showError('name-error', 'El nombre es obligatorio');
-        isValid = false;
-    } else {
-        clearError('name-error');
-    }
-
-    if (!formData.price || formData.price < 1000) {
-        showError('price-error', 'El precio debe ser mayor a $1.000');
-        isValid = false;
-    } else {
-        clearError('price-error');
-    }
-
-    if (formData.stock < 0) {
-        showError('stock-error', 'El stock no puede ser negativo');
-        isValid = false;
-    } else {
-        clearError('stock-error');
-    }
-
-    if (formData.criticalStock >= formData.stock) {
-        showError('critical-stock-error', 'El stock crítico debe ser menor al stock total');
-        isValid = false;
-    } else {
-        clearError('critical-stock-error');
-    }
-
-    if (!formData.category) {
-        showError('category-error', 'La categoría es obligatoria');
-        isValid = false;
-    } else {
-        clearError('category-error');
-    }
-
-    if (!formData.image) {
-        showError('image-error', 'La URL de la imagen es obligatoria');
-        isValid = false;
-    } else if (!isValidUrl(formData.image)) {
-        showError('image-error', 'La URL de la imagen no es válida');
-        isValid = false;
-    } else {
-        clearError('image-error');
-    }
-
-    return isValid;
-}
-
-function isPizzaCodeExists(code) {
-    const pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
-    return pizzas.some(pizza => pizza.code === code);
-}
-
-function savePizza(pizzaData) {
-    const pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
-    pizzas.push(pizzaData);
-    localStorage.setItem('pixeleriaPizzas', JSON.stringify(pizzas));
-}
-
-// Formulario de usuario nuevo
-const chileData = {
-    regiones: [
-        { id: 1, nombre: "Arica y Parinacota", comunas: ["Arica", "Camarones", "Putre", "General Lagos"] },
-        { id: 2, nombre: "Tarapacá", comunas: ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"] },
-        { id: 3, nombre: "Antofagasta", comunas: ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollagüe", "San Pedro de Atacama", "Tocopilla", "María Elena"] },
-        { id: 4, nombre: "Atacama", comunas: ["Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro", "Vallenar", "Alto del Carmen", "Freirina", "Huasco"] },
-        { id: 5, nombre: "Coquimbo", comunas: ["La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paihuano", "Vicuña", "Illapel", "Canela", "Los Vilos", "Salamanca", "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado"] },
-        { id: 6, nombre: "Valparaíso", comunas: ["Valparaíso", "Casablanca", "Concón", "Juan Fernández", "Puchuncaví", "Quintero", "Viña del Mar", "Isla de Pascua", "Los Andes", "Calle Larga", "Rinconada", "San Esteban", "La Ligua", "Cabildo", "Papudo", "Petorca", "Zapallar", "Quillota", "Calera", "Hijuelas", "La Cruz", "Nogales", "San Antonio", "Algarrobo", "Cartagena", "El Quisco", "El Tabo", "Santo Domingo", "San Felipe", "Catemu", "Llaillay", "Panquehue", "Putaendo", "Santa María", "Quilpué", "Limache", "Olmué", "Villa Alemana"] },
-        { id: 7, nombre: "Metropolitana de Santiago", comunas: ["Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Joaquín", "San Miguel", "San Ramón", "Santiago", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"] },
-        { id: 8, nombre: "Libertador General Bernardo O'Higgins", comunas: ["Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente", "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"] },
-        { id: 9, nombre: "Maule", comunas: ["Talca", "ConsVtución", "Curepto", "Empedrado", "Maule", "Pelarco", "Pencahue", "Río Claro", "San Clemente", "San Rafael", "Cauquenes", "Chanco", "Pelluhue", "Curicó", "Hualañé", "Licantén", "Molina", "Rauco", "Romeral", "Sagrada Familia", "Teno", "Vichuquén", "Linares", "Colbún", "Longaví", "Parral", "ReVro", "San Javier", "Villa Alegre", "Yerbas Buenas"] },
-        { id: 10, nombre: "Ñuble", comunas: ["Cobquecura", "Coelemu", "Ninhue", "Portezuelo", "Quirihue", "Ránquil", "Treguaco", "Bulnes", "Chillán Viejo", "Chillán", "El Carmen", "Pemuco", "Pinto", "Quillón", "San Ignacio", "Yungay", "Coihueco", "Ñiquén", "San Carlos", "San Fabián", "San Nicolás"] },
-        { id: 11, nombre: "Biobío", comunas: ["Concepción", "Coronel", "Chiguayante", "Florida", "Hualpén", "Hualqui", "Lota", "Penco", "San Pedro de la Paz", "Santa Juana", "Talcahuano", "Tomé", "Arauco", "Cañete", "Contulmo", "Curanilahue", "Lebu", "Los Álamos", "Tirúa", "Los Ángeles", "Antuco", "Cabrero", "Laja", "Mulchén", "Nacimiento", "Negrete", "Quilaco", "Quilleco", "San Rosendo", "Santa Bárbara", "Tucapel", "Yumbel", "Alto Biobío"] },
-        { id: 12, nombre: "La Araucanía", comunas: ["Temuco", "Carahue", "Cunco", "Curarrehue", "Freire", "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial", "Padre las Casas", "Perquenco", "Pitrufquén", "Pucón", "Saavedra", "Teodoro Schmidt", "Toltén", "Vilcún", "Villarrica", "Cholchol", "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay", "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén", "Victoria"] },
-        { id: 13, nombre: "Los Ríos", comunas: ["Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil", "Mariquina", "Paillaco", "Panguipulli", "La Unión", "Futrono", "Lago Ranco", "Río Bueno"] },
-        { id: 14, nombre: "Los Lagos", comunas: ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "FruVllar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"] },
-        { id: 15, nombre: "Aysén del General Carlos Ibáñez del Campo", comunas: ["Coihaique", "Lago Verde", "Aysén", "Cisnes", "Guaitecas", "Cochrane", "O'Higgins", "Tortel", "Chile Chico", "Río Ibáñez"] },
-        { id: 16, nombre: "Magallanes y de la Antártica Chilena", comunas: ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"] }
-    ]
 };
 
-function loadChileanRegions() {
-    const regionSelect = document.getElementById('user-region');
-    const comunaSelect = document.getElementById('user-commune');
+// Inicialización cuando el DOM está listo
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarAlmacenamiento();
+    inicializarNavegacion();
+    inicializarFormularios();
+    inicializarEventListeners();
 
-    if (regionSelect) {
-        chileData.regiones.forEach(region => {
-            const option = document.createElement('option');
-            option.value = region.nombre;
-            option.textContent = region.nombre;
-            regionSelect.appendChild(option);
-        });
+    // Cargar datos si estamos en la página de edición
+    if (window.location.pathname.includes('editar-pizza')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const pizzaId = urlParams.get('id');
+        if (pizzaId) {
+            cargarDatosPizza(pizzaId);
+        }
+    }
 
-        regionSelect.addEventListener('change', function() {
-            const selectedRegion = chileData.regiones.find(r => r.nombre === this.value);
+    // Cargar tabla de productos si estamos en la página admin
+    if (window.location.pathname.endsWith('admin.html') ||
+        window.location.pathname.endsWith('/')) {
+        cargarTablaProductos();
+    }
+});
 
-            comunaSelect.disabled = !selectedRegion;
-            comunaSelect.innerHTML = '';
+// Inicializar almacenamiento con datos por defecto si está vacío
+function inicializarAlmacenamiento() {
+    if (!localStorage.getItem('pizzas')) {
+        localStorage.setItem('pizzas', JSON.stringify(pizzasIniciales));
+    }
+}
 
-            if (selectedRegion) {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Selecciona una comuna';
-                comunaSelect.appendChild(defaultOption);
+// Obtener todas las pizzas del almacenamiento
+function obtenerPizzas() {
+    return JSON.parse(localStorage.getItem('pizzas')) || {};
+}
 
-                selectedRegion.comunas.forEach(comuna => {
-                    const option = document.createElement('option');
-                    option.value = comuna;
-                    option.textContent = comuna;
-                    comunaSelect.appendChild(option);
+// Guardar pizzas en el almacenamiento
+function guardarPizzas(pizzas) {
+    localStorage.setItem('pizzas', JSON.stringify(pizzas));
+}
+
+// Configurar la navegación entre secciones
+function inicializarNavegacion() {
+    const navItems = document.querySelectorAll('.nav-item');
+
+    if (navItems.length > 0) {
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.id === 'logout-btn') {
+                    cerrarSesion();
+                    return;
+                }
+
+                // Remover clase active de todos los items
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
                 });
-            } else {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Primero selecciona una región';
-                comunaSelect.appendChild(defaultOption);
+
+                // Agregar clase active al item clickeado
+                this.classList.add('active');
+
+                // Ocultar todas las secciones
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Mostrar la sección correspondiente
+                const sectionId = this.getAttribute('data-section') + '-section';
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // Actualizar el título en el header
+                const sectionTitle = this.querySelector('span').textContent;
+                const headerTitle = document.querySelector('.admin-header h2');
+                if (headerTitle) {
+                    headerTitle.textContent = sectionTitle;
+                }
+            });
+        });
+    }
+}
+
+// Configurar event listeners generales
+function inicializarEventListeners() {
+    // Toggle sidebar
+    const toggleSidebar = document.querySelector('.toggle-sidebar');
+    if (toggleSidebar) {
+        toggleSidebar.addEventListener('click', function() {
+            const sidebar = document.querySelector('.admin-sidebar');
+            const main = document.querySelector('.admin-main');
+
+            if (sidebar && main) {
+                sidebar.classList.toggle('collapsed');
+                main.classList.toggle('expanded');
             }
         });
     }
 }
 
-function setupUserFormValidation() {
-    const runInput = document.getElementById('user-run');
-    const emailInput = document.getElementById('user-email');
-    const passwordInput = document.getElementById('user-password');
-    const confirmPasswordInput = document.getElementById('user-confirm-password');
+// Configurar validación de formularios
+function inicializarFormularios() {
+    // Formulario de pizza (crear y editar)
+    const pizzaForm = document.getElementById('pizza-form');
+    if (pizzaForm) {
+        pizzaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    runInput.addEventListener('blur', function() {
-        const run = this.value;
+            if (validarFormularioPizza()) {
+                // Determinar si es crear o editar
+                const urlParams = new URLSearchParams(window.location.search);
+                const pizzaId = urlParams.get('id');
 
-        if (run && isUserRunExists(run)) {
-            showError('run-error', 'Este RUN ya está registrado');
-        } else {
-            clearError('run-error');
-        }
-    });
+                if (pizzaId) {
+                    actualizarPizza(pizzaId);
+                } else {
+                    crearPizza();
+                }
+            }
+        });
+    }
 
-    emailInput.addEventListener('blur', function() {
-        const email = this.value;
-
-        if (email && isUserEmailExists(email)) {
-            showError('email-error', 'Este email ya está registrado');
-        } else {
-            clearError('email-error');
-        }
-    });
-
-    confirmPasswordInput.addEventListener('blur', function() {
-        const password = passwordInput.value;
-        const confirmPassword = this.value;
-
-        if (password !== confirmPassword) {
-            showError('confirm-password-error', 'Las contraseñas no coinciden');
-        } else {
-            clearError('confirm-password-error');
-        }
-    });
+    // Formulario de login
+    const loginForm = document.querySelector('form');
+    if (loginForm && window.location.pathname.includes('login')) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'admin.html';
+        });
+    }
 }
 
-function handleUserSubmit(e) {
-    e.preventDefault();
+// Función para crear una nueva pizza
+function crearPizza() {
+    const pizzas = obtenerPizzas();
 
-    const formData = {
-        run: document.getElementById('user-run').value,
-        name: document.getElementById('user-name').value,
-        lastname: document.getElementById('user-lastname').value,
-        email: document.getElementById('user-email').value,
-        birthdate: document.getElementById('user-birthdate').value,
-        password: document.getElementById('user-password').value,
-        role: document.getElementById('user-role').value,
-        region: document.getElementById('user-region').value,
-        commune: document.getElementById('user-commune').value,
-        street: document.getElementById('user-street').value,
-        number: document.getElementById('user-number').value,
-        department: document.getElementById('user-department').value,
-        status: document.getElementById('user-status').value,
-        createdAt: new Date().toISOString()
+    // Generar un nuevo ID
+    const nuevoId = Object.keys(pizzas).length > 0 ?
+        Math.max(...Object.keys(pizzas).map(id => parseInt(id))) + 1 : 1;
+
+    // Crear el objeto pizza
+    const nuevaPizza = {
+        id: nuevoId.toString(),
+        codigo: document.getElementById('codigo').value,
+        nombre: document.getElementById('nombre').value,
+        descripcion: document.getElementById('descripcion').value,
+        precio: parseInt(document.getElementById('precio').value),
+        stock: parseInt(document.getElementById('stock').value),
+        categoria: document.getElementById('categoria').value,
+        estado: 'activo'
     };
 
-    if (!validateUserForm(formData)) {
-        return;
-    }
+    // Agregar la nueva pizza
+    pizzas[nuevoId] = nuevaPizza;
 
-    saveUser(formData);
-    alert('¡Usuario creado exitosamente!');
-    window.location.href = 'admin.html#users';
+    // Guardar en localStorage
+    guardarPizzas(pizzas);
+
+    alert('¡Pizza creada con éxito!');
+    window.location.href = 'admin.html#products-section';
 }
 
-function validateUserForm(formData) {
+// Función para actualizar una pizza existente
+function actualizarPizza(pizzaId) {
+    const pizzas = obtenerPizzas();
+
+    if (pizzas[pizzaId]) {
+        // Actualizar la pizza
+        pizzas[pizzaId] = {
+            id: pizzaId,
+            codigo: document.getElementById('codigo').value,
+            nombre: document.getElementById('nombre').value,
+            descripcion: document.getElementById('descripcion').value,
+            precio: parseInt(document.getElementById('precio').value),
+            stock: parseInt(document.getElementById('stock').value),
+            categoria: document.getElementById('categoria').value,
+            estado: document.getElementById('estado').value
+        };
+
+        // Guardar en localStorage
+        guardarPizzas(pizzas);
+
+        alert('¡Pizza actualizada con éxito!');
+        window.location.href = 'admin.html#products-section';
+    } else {
+        alert('Error: No se encontró la pizza a actualizar');
+    }
+}
+
+// Función para cargar la tabla de productos
+function cargarTablaProductos() {
+    const tabla = document.querySelector('.data-table tbody');
+    if (!tabla) return;
+
+    // Limpiar tabla
+    tabla.innerHTML = '';
+
+    // Obtener pizzas
+    const pizzas = obtenerPizzas();
+
+    // Llenar tabla
+    for (const id in pizzas) {
+        const pizza = pizzas[id];
+
+        const fila = document.createElement('tr');
+
+        fila.innerHTML = `
+            <td>${pizza.codigo}</td>
+            <td>${pizza.nombre}</td>
+            <td>$${pizza.precio.toLocaleString('es-CL')}</td>
+            <td class="stock-cell">
+                <span class="stock-badge ${pizza.stock <= 5 ? 'critical' : pizza.stock <= 10 ? 'warning' : ''}">
+                    ${pizza.stock}
+                </span>
+            </td>
+            <td>${pizza.categoria}</td>
+            <td><span class="status-badge ${pizza.estado}">${pizza.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
+            <td>
+                <button class="action-btn edit" onclick="editarPizza(${pizza.id})"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" onclick="eliminarProducto(${pizza.id})"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+
+        tabla.appendChild(fila);
+    }
+}
+
+// Función para redirigir a la página de edición
+function editarPizza(id) {
+    window.location.href = `editar-pizza.html?id=${id}`;
+}
+
+// Función para validar formulario de pizza
+function validarFormularioPizza() {
     let isValid = true;
 
-    if (!formData.run) {
-        showError('run-error', 'El RUN es obligatorio');
+    // Validar código
+    const codigo = document.getElementById('codigo');
+    const codigoError = document.getElementById('codigo-error');
+    if (!codigo || !codigo.value.trim()) {
+        if (codigoError) codigoError.textContent = 'El código es obligatorio';
         isValid = false;
-    } else if (!isValidRun(formData.run)) {
-        showError('run-error', 'El RUN no tiene un formato válido');
-        isValid = false;
-    } else if (isUserRunExists(formData.run)) {
-        showError('run-error', 'Este RUN ya está registrado');
-        isValid = false;
-    } else {
-        clearError('run-error');
+    } else if (codigoError) {
+        codigoError.textContent = '';
     }
 
-    if (!formData.email) {
-        showError('email-error', 'El email es obligatorio');
+    // Validar nombre
+    const nombre = document.getElementById('nombre');
+    const nombreError = document.getElementById('nombre-error');
+    if (!nombre || !nombre.value.trim()) {
+        if (nombreError) nombreError.textContent = 'El nombre es obligatorio';
         isValid = false;
-    } else if (!isValidEmail(formData.email)) {
-        showError('email-error', 'El email no tiene un formato válido');
-        isValid = false;
-    } else if (isUserEmailExists(formData.email)) {
-        showError('email-error', 'Este email ya está registrado');
-        isValid = false;
-    } else {
-        clearError('email-error');
+    } else if (nombreError) {
+        nombreError.textContent = '';
     }
 
-    if (!formData.password) {
-        showError('password-error', 'La contraseña es obligatoria');
+    // Validar descripción
+    const descripcion = document.getElementById('descripcion');
+    const descripcionError = document.getElementById('descripcion-error');
+    if (!descripcion || !descripcion.value.trim()) {
+        if (descripcionError) descripcionError.textContent = 'La descripción es obligatoria';
         isValid = false;
-    } else if (formData.password.length < 6) {
-        showError('password-error', 'La contraseña debe tener al menos 6 caracteres');
-        isValid = false;
-    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(formData.password)) {
-        showError('password-error', 'La contraseña debe contener letras y números');
-        isValid = false;
-    } else {
-        clearError('password-error');
+    } else if (descripcionError) {
+        descripcionError.textContent = '';
     }
 
-    const confirmPassword = document.getElementById('user-confirm-password').value;
-    if (formData.password !== confirmPassword) {
-        showError('confirm-password-error', 'Las contraseñas no coinciden');
+    // Validar precio
+    const precio = document.getElementById('precio');
+    const precioError = document.getElementById('precio-error');
+    if (!precio || !precio.value || precio.value <= 0) {
+        if (precioError) precioError.textContent = 'El precio debe ser mayor a 0';
         isValid = false;
-    } else {
-        clearError('confirm-password-error');
+    } else if (precioError) {
+        precioError.textContent = '';
     }
 
-    if (!formData.role) {
-        showError('role-error', 'El tipo de usuario es obligatorio');
+    // Validar stock
+    const stock = document.getElementById('stock');
+    const stockError = document.getElementById('stock-error');
+    if (!stock || !stock.value || stock.value < 0) {
+        if (stockError) stockError.textContent = 'El stock no puede ser negativo';
         isValid = false;
-    } else {
-        clearError('role-error');
+    } else if (stockError) {
+        stockError.textContent = '';
     }
 
-    if (!formData.street) {
-        showError('street-error', 'La calle es obligatoria');
+    // Validar categoría
+    const categoria = document.getElementById('categoria');
+    const categoriaError = document.getElementById('categoria-error');
+    if (!categoria || !categoria.value) {
+        if (categoriaError) categoriaError.textContent = 'Debes seleccionar una categoría';
         isValid = false;
-    } else {
-        clearError('street-error');
-    }
-
-    if (!formData.number) {
-        showError('number-error', 'El número es obligatorio');
-        isValid = false;
-    } else {
-        clearError('number-error');
+    } else if (categoriaError) {
+        categoriaError.textContent = '';
     }
 
     return isValid;
 }
 
-function isValidRun(run) {
-    const runRegex = /^[0-9]{7,9}[0-9Kk]{1}$/;
-    return runRegex.test(run);
-}
+// Función para cargar datos de pizza para edición
+function cargarDatosPizza(pizzaId) {
+    const pizzas = obtenerPizzas();
+    const pizza = pizzas[pizzaId];
 
-function isUserRunExists(run) {
-    const users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
-    return users.some(user => user.run === run);
-}
-
-function isUserEmailExists(email) {
-    const users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
-    return users.some(user => user.email === email);
-}
-
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function saveUser(userData) {
-    const users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
-    users.push(userData);
-    localStorage.setItem('pixeleriaUsers', JSON.stringify(users));
-}
-
-// Funciones utilitarias
-function showError(elementId, message) {
-    const errorElement = document.getElementById(elementId);
-    if (errorElement) {
-        errorElement.textContent = message;
+    if (pizza) {
+        if (document.getElementById('codigo')) document.getElementById('codigo').value = pizza.codigo;
+        if (document.getElementById('nombre')) document.getElementById('nombre').value = pizza.nombre;
+        if (document.getElementById('descripcion')) document.getElementById('descripcion').value = pizza.descripcion;
+        if (document.getElementById('precio')) document.getElementById('precio').value = pizza.precio;
+        if (document.getElementById('stock')) document.getElementById('stock').value = pizza.stock;
+        if (document.getElementById('categoria')) document.getElementById('categoria').value = pizza.categoria;
+        if (document.getElementById('estado')) document.getElementById('estado').value = pizza.estado;
     }
 }
 
-function clearError(elementId) {
-    const errorElement = document.getElementById(elementId);
-    if (errorElement) {
-        errorElement.textContent = '';
+// Función para eliminar producto
+function eliminarProducto(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        const pizzas = obtenerPizzas();
+
+        if (pizzas[id]) {
+            delete pizzas[id];
+            guardarPizzas(pizzas);
+
+            // Recargar la tabla
+            cargarTablaProductos();
+
+            alert('Producto eliminado con éxito');
+        } else {
+            alert('Error: No se encontró el producto');
+        }
     }
 }
 
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
-// Funciones para cargar datos en las tablas
-function loadProductsTable() {
-    const productsTable = document.querySelector('#products-section .data-table tbody');
-    if (!productsTable) return;
-
-    const pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
-    productsTable.innerHTML = '';
-
-    if (pizzas.length === 0) {
-        productsTable.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align: center; padding: 20px;">
-                    No hay productos registrados. <a href="nueva-pizza.html">Agregar primera pizza</a>
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    pizzas.forEach((pizza, index) => {
-        const stockClass = pizza.stock <= pizza.criticalStock ?
-                          (pizza.stock <= 0 ? 'critical' : 'warning') : '';
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${pizza.code || 'PZ' + (index + 1).toString().padStart(3, '0')}</td>
-            <td>${pizza.name}</td>
-            <td>$${pizza.price?.toLocaleString('es-CL') || '0'}</td>
-            <td class="stock-cell">
-                <span class="stock-badge ${stockClass}">${pizza.stock || 0}</span>
-            </td>
-            <td><span class="status-badge ${pizza.status || 'active'}">${pizza.status === 'inactive' ? 'Inactivo' : 'Activo'}</span></td>
-            <td>
-                <button class="action-btn edit" data-id="${pizza.code}"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete" data-id="${pizza.code}"><i class="fas fa-trash"></i></button>
-            </td>
-        `;
-        productsTable.appendChild(row);
-    });
-
-    // Agregar event listeners a los botones
-    attachProductEventListeners();
-}
-
-function loadUsersTable() {
-    const usersTable = document.querySelector('#users-section .data-table tbody');
-    if (!usersTable) return;
-
-    const users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
-    usersTable.innerHTML = '';
-
-    if (users.length === 0) {
-        usersTable.innerHTML = `
-            <tr>
-                <td colspan="7" style="text-align: center; padding: 20px;">
-                    No hay usuarios registrados. <a href="nuevo-usuario.html">Agregar primer usuario</a>
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    users.forEach((user, index) => {
-        const registerDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-CL') :
-                           new Date().toLocaleDateString('es-CL');
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${user.run || 'US' + (index + 1).toString().padStart(3, '0')}</td>
-            <td>${user.name} ${user.lastname}</td>
-            <td>${user.email}</td>
-            <td><span class="role-badge ${user.role}">${getRoleName(user.role)}</span></td>
-            <td>${registerDate}</td>
-            <td><span class="status-badge ${user.status || 'active'}">${user.status === 'inactive' ? 'Inactivo' : 'Activo'}</span></td>
-            <td>
-                <button class="action-btn edit" data-id="${user.run}"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete" data-id="${user.run}"><i class="fas fa-trash"></i></button>
-            </td>
-        `;
-        usersTable.appendChild(row);
-    });
-
-    // Agregar event listeners a los botones
-    attachUserEventListeners();
-}
-
-function getRoleName(role) {
-    const roles = {
-        'admin': 'Administrador',
-        'seller': 'Vendedor',
-        'customer': 'Cliente'
-    };
-    return roles[role] || 'Cliente';
-}
-
-function attachProductEventListeners() {
-    document.querySelectorAll('#products-section .action-btn.edit').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            alert(`Editar producto ${productId} - Funcionalidad en desarrollo`);
-        });
-    });
-
-    document.querySelectorAll('#products-section .action-btn.delete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            if (confirm(`¿Estás seguro de eliminar el producto ${productId}?`)) {
-                deleteProduct(productId);
-            }
-        });
-    });
-}
-
-function attachUserEventListeners() {
-    document.querySelectorAll('#users-section .action-btn.edit').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            alert(`Editar usuario ${userId} - Funcionalidad en desarrollo`);
-        });
-    });
-
-    document.querySelectorAll('#users-section .action-btn.delete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            if (confirm(`¿Estás seguro de eliminar el usuario ${userId}?`)) {
-                deleteUser(userId);
-            }
-        });
-    });
-}
-
-function deleteProduct(productId) {
-    let pizzas = JSON.parse(localStorage.getItem('pixeleriaPizzas')) || [];
-    pizzas = pizzas.filter(pizza => pizza.code !== productId);
-    localStorage.setItem('pixeleriaPizzas', JSON.stringify(pizzas));
-    loadProductsTable();
-    alert('Producto eliminado correctamente');
-}
-
-function deleteUser(userId) {
-    let users = JSON.parse(localStorage.getItem('pixeleriaUsers')) || [];
-    users = users.filter(user => user.run !== userId);
-    localStorage.setItem('pixeleriaUsers', JSON.stringify(users));
-    loadUsersTable();
-    alert('Usuario eliminado correctamente');
-}
-
-// Función para cargar datos cuando se cambia de sección
-function loadSectionData(sectionId) {
-    if (sectionId === 'products-section') {
-        loadProductsTable();
-    } else if (sectionId === 'users-section') {
-        loadUsersTable();
+// Función para cerrar sesión
+function cerrarSesion() {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        window.location.href = 'login.html';
     }
 }
