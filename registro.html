@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixzelería - Registro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css">
+</head>
+<body>
+<div class="header">
+    <h1>Pixzelería > REGISTRO</h1>
+</div>
+
+<p class="description">Crear Cuenta</p>
+
+<div class="navigation window">
+    <nav>
+        <a href="index.html" data-page="index.html">inicio</a> |
+        <a href="login.html" data-page="login.html">login</a> |
+        <a href="menu.html" data-page="menu.html">menú</a> |
+        <a href="about.html" data-page="about.html">sobre nosotros</a> |
+        <a href="contact.html" data-page="contact.html">contacto</a> |
+        <a href="blogs.html" data-page="blogs.html">blogs</a>
+    </nav>
+</div>
+
+<div class="window" id="page-content">
+    <div class="window-title">Registro</div>
+    <form id="register-form" class="auth-form">
+        <div class="form-group">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="register-username" name="username" required maxlength="100">
+            <div class="error-message" id="username-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="register-email" name="email" required>
+            <div class="error-message" id="email-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña (4-10 caracteres):</label>
+            <input type="password" id="register-password" name="password" required minlength="4" maxlength="10">
+            <div class="error-message" id="password-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">Repetir contraseña:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required minlength="4" maxlength="10">
+            <div class="error-message" id="confirm-password-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="region">Región:</label>
+            <select id="region" name="region">
+                <option value="">Selecciona una región</option>
+                <!-- Las opciones se cargarán con JavaScript -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="comuna">Comuna:</label>
+            <select id="comuna" name="comuna" disabled>
+                <option value="">Primero selecciona una región</option>
+                <!-- Las opciones se cargarán con JavaScript -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="favorite-pizza">Pizza favorita (opcional):</label>
+            <input type="text" id="favorite-pizza" name="favorite-pizza" maxlength="100">
+        </div>
+
+        <button type="submit" class="pixel-button">Registrarse</button>
+    </form>
+
+    <p>¿Ya tienes cuenta? <a href="login.html" data-page="login.html">Inicia sesión aquí</a></p>
+</div>
+
+<script src="script.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

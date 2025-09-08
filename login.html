@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixzelería - Iniciar Sesión</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/eto0sad.css">
+</head>
+<body>
+<div class="header">
+    <h1>Pixzelería > LOGIN</h1>
+</div>
+
+<p class="description">Iniciar Sesión</p>
+
+<div class="navigation window">
+    <nav>
+        <a href="index.html" data-page="index.html">inicio</a> |
+        <a href="login.html" data-page="login.html">login</a> |
+        <a href="menu.html" data-page="menu.html">menú</a> |
+        <a href="about.html" data-page="about.html">sobre nosotros</a> |
+        <a href="contact.html" data-page="contact.html">contacto</a> |
+        <a href="blogs.html" data-page="blogs.html">blogs</a>
+    </nav>
+</div>
+
+<div class="window" id="page-content">
+    <div class="window-title">Login</div>
+    <form id="login-form" class="auth-form">
+        <div class="form-group">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="login-username" name="username" required maxlength="100">
+            <div class="error-message" id="username-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="login-password" name="password" required minlength="4" maxlength="10">
+            <div class="error-message" id="password-error"></div>
+        </div>
+
+        <button type="submit" class="pixel-button">Ingresar</button>
+    </form>
+
+    <p>¿No tienes cuenta? <a href="registro.html" data-page="registro.html">Regístrate aquí</a></p>
+</div>
+
+<script src="script.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
