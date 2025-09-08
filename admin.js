@@ -1,5 +1,3 @@
-// admin.js - Todas las funcionalidades del panel de administración
-
 // Datos iniciales de las pizzas
 const pizzasIniciales = {
     '1': {
