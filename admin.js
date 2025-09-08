@@ -384,3 +384,272 @@ function cerrarSesion() {
         window.location.href = 'login.html';
     }
 }
+
+const reportData = {
+    ventasMensuales: {
+        enero: 1250000,
+        febrero: 1350000,
+        marzo: 1420000,
+        abril: 1380000,
+        mayo: 1520000,
+        junio: 1480000,
+        julio: 1620000,
+        agosto: 1580000,
+        septiembre: 1720000,
+        octubre: 1680000,
+        noviembre: 1820000,
+        diciembre: 1780000
+    },
+    topProductos: [
+        { nombre: 'Margherita Pixel', ventas: 1420000 },
+        { nombre: 'Pepperoni Retro', ventas: 1280000 },
+        { nombre: 'Super Mario Special', ventas: 980000 },
+        { nombre: 'Tetris Veggie', ventas: 760000 },
+        { nombre: 'Hawaiian 8-Bit', ventas: 640000 }
+    ],
+    topClientes: [
+        { nombre: 'Carlos López', monto: 320000 },
+        { nombre: 'María González', monto: 280000 },
+        { nombre: 'Juan Pérez', monto: 240000 },
+        { nombre: 'Ana Martínez', monto: 210000 },
+        { nombre: 'Roberto Sánchez', monto: 190000 }
+    ]
+};
+
+// Inicializar gráficos cuando la sección esté activa
+function inicializarReportes() {
+    // Verificar si estamos en la sección de reportes
+    const reportSection = document.getElementById('reports-section');
+    if (!reportSection || !reportSection.classList.contains('active')) {
+        return;
+    }
+
+    // Crear gráfico de ventas mensuales
+    crearGraficoVentas();
+
+    // Crear gráfico de top productos
+    crearGraficoTopProductos();
+
+    // Crear gráfico de top clientes
+    crearGraficoTopClientes();
+}
+
+// Función para crear el gráfico de ventas mensuales
+function crearGraficoVentas() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    // Destruir gráfico existente si hay uno
+    if (window.salesChartInstance) {
+        window.salesChartInstance.destroy();
+    }
+
+    const meses = Object.keys(reportData.ventasMensuales);
+    const ventas = Object.values(reportData.ventasMensuales);
+
+    window.salesChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: 'Ventas en $',
+                data: ventas,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + (value / 1000000).toFixed(1) + 'M';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Función para crear el gráfico de top productos
+function crearGraficoTopProductos() {
+    const ctx = document.getElementById('topProductsChart').getContext('2d');
+
+    // Destruir gráfico existente si hay uno
+    if (window.topProductsChartInstance) {
+        window.topProductsChartInstance.destroy();
+    }
+
+    const productos = reportData.topProductos.map(item => item.nombre);
+    const ventas = reportData.topProductos.map(item => item.ventas);
+
+    window.topProductsChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: productos,
+            datasets: [{
+                label: 'Ventas en $',
+                data: ventas,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + (value / 1000000).toFixed(1) + 'M';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Función para crear el gráfico de top clientes
+function crearGraficoTopClientes() {
+    const ctx = document.getElementById('topCustomersChart').getContext('2d');
+
+    // Destruir gráfico existente si hay uno
+    if (window.topCustomersChartInstance) {
+        window.topCustomersChartInstance.destroy();
+    }
+
+    const clientes = reportData.topClientes.map(item => item.nombre);
+    const montos = reportData.topClientes.map(item => item.monto);
+
+    window.topCustomersChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: clientes,
+            datasets: [{
+                label: 'Monto en $',
+                data: montos,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Event listeners para los filtros de reportes
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar reportes si estamos en esa sección
+    const reportSection = document.getElementById('reports-section');
+    if (reportSection && reportSection.classList.contains('active')) {
+        inicializarReportes();
+    }
+
+    // Botón para generar reporte
+    const generateReportBtn = document.getElementById('generate-report');
+    if (generateReportBtn) {
+        generateReportBtn.addEventListener('click', function() {
+            // Simular carga de nuevos datos
+            setTimeout(function() {
+                inicializarReportes();
+                alert('Reporte actualizado con los datos más recientes');
+            }, 500);
+        });
+    }
+
+    // Botón para exportar reporte
+    const exportReportBtn = document.getElementById('export-report');
+    if (exportReportBtn) {
+        exportReportBtn.addEventListener('click', function() {
+            alert('Funcionalidad de exportación en desarrollo. Próximamente disponible.');
+        });
+    }
+
+    // Cambio de período del reporte
+    const reportPeriod = document.getElementById('report-period');
+    if (reportPeriod) {
+        reportPeriod.addEventListener('change', function() {
+            // Simular cambio de datos según el período seleccionado
+            setTimeout(function() {
+                inicializarReportes();
+            }, 300);
+        });
+    }
+});
+
+// Observar cambios en la sección activa para inicializar gráficos
+let observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'class') {
+            const reportSection = document.getElementById('reports-section');
+            if (reportSection && reportSection.classList.contains('active')) {
+                // Pequeño retraso para asegurar que la sección esté visible
+                setTimeout(inicializarReportes, 100);
+            }
+        }
+    });
+});
+
+// Comenzar a observar la sección de reportes
+const reportSection = document.getElementById('reports-section');
+if (reportSection) {
+    observer.observe(reportSection, { attributes: true });
+}
