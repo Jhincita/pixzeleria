@@ -29,7 +29,13 @@ body {
     box-shadow: 6px 6px 15px rgba(0,0,0,0.3);
 
     position: relative;
+
+    background-image:url("window_border.svg");
+    background-size: 100% 100%; /* stretch to fit div exactly */
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
 
 .window-title {
     background-color: #ccc;
