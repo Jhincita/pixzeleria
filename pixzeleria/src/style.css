@@ -1,0 +1,173 @@
+
+body {
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+    font-weight: 160;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+
+.window , .page-content{
+    position: relative;     
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0;             
+    border: 2px solid #000;
+    background-color: #fff;
+    background-image: url("assets/window_border_red.svg");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.window-title {
+    background-color: rgba(255,159,181,1);
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;           /* small padding for text */
+    margin: 0;
+      /* stick it to top */
+    top: 0;
+    left: 0;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+/* Container for buttons */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Buttons inside the container */
+.container .button {
+    display: inline-block;             /* make them block so flex applies properly */
+    flex: 1 1 100px;
+    min-width: 80px;
+    max-width: 150px;
+    padding: 1px;
+    border: 2px solid #000;
+    background-color: #f4f4f4;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+.container .button:hover {
+    background-color: #e84444;
+    color: #fff;
+}
+
+
+
+
+
+
+.image-container {
+    width: 40%;
+    max-width: 200px;
+    margin: 0 auto;           /* center the container itself */
+    text-align: center;       /* fallback centering */
+}
+
+
+
+img {
+    display: block;        /* block prevents inline quirks */
+    max-width: 60%;       /* never bigger than parent container */
+    height: auto;          /* maintain aspect ratio */
+    margin: 0 auto;        /* center the image */
+
+    height: auto;
+}
+
+
+
+
+ 
+.title-logo{
+    width: 100%;          /* or whatever max size you want */
+
+    /* maintain aspect ratio: 1:1 for square, adjust as needed */
+    aspect-ratio: 2 / 1;           /* modern browsers support this */
+
+    margin: 0 auto;
+}
+
+
+
+/* Estilos para formularios */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border: 2px solid #000;
+    font-family: "lores-15-bold-alt-oakland", sans-serif;
+    background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    min-height: 1.2em;
+}
+
+
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid;
+    text-align: center;
+}
+
+.message.success {
+    border-color: green;
+    background-color: #e6ffe6;
+    color: green;
+}
+
+.message.error {
+    border-color: red;
+    background-color: #ffe6e6;
+    color: red;
+}
+
+@media (max-width: 350px) {
+    .window {
+        margin: 10px 5px; /* small margins */
+        padding: 5px;     /* reduce padding */
+    }
+}

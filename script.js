@@ -41,9 +41,7 @@ window.addEventListener('popstate', e => {
     }
 });
 
-// Agregar las nuevas páginas a la navegación
-const links = document.querySelectorAll('nav a');
-const contentDiv = document.getElementById('page-content');
+
 
 // Verificar si estamos en la página principal
 if (contentDiv) {
